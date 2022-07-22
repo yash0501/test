@@ -18,9 +18,7 @@ export const voteCandidateOperation = async (candidate) => {
     const contractInstance = await tezos.wallet.at(
       "KT1KXd9697MdB8X73bAu3XsPVC393dHjuVnC"
     );
-    const op = await contractInstance.methods
-      .vote((candidate = candidate))
-      .send();
+    const op = await contractInstance.methods.vote(candidate).send();
     await op.confirmation(1);
   } catch (err) {
     throw err;

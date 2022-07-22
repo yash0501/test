@@ -73,9 +73,6 @@ const App = () => {
     }
   };
 
-  // TODO 11.a - Complete onEndGame function
-  const onEndGame = async () => {};
-
   return (
     <div className="h-100">
       <Navbar />
