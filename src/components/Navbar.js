@@ -1,10 +1,25 @@
 import { useEffect, useState } from "react";
 import { connectWallet, getAccount } from "../utils/wallet";
+import { useAuthState } from "react-firebase-hooks/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+} from "firebase/auth";
+import { auth, db, logout } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [account, setAccount] = useState("");
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // if (!user) return navigate("/");
     (async () => {
       // TODO 5.b - Get the active account
       const account = await getAccount();
@@ -19,6 +34,11 @@ const Navbar = () => {
     setAccount(account);
   };
 
+  const Logout = () =>{
+    signOut(auth);
+    navigate("/")
+  }
+
   return (
     <div className="navbar navbar-dark bg-dark fixed-top">
       <div className="container py-2">
@@ -26,14 +46,25 @@ const Navbar = () => {
           Tezos Lottery
         </a>
         <div className="d-flex">
-          {/* TODO 4.b - Call connectWallet function onClick  */}
+          
           <button className="btn btn-outline-info" onClick={onConnectWallet}>
-            {/* TODO 5.a - Show account address if wallet is connected */}
+             
             Connect Wallet
           </button>
-          {account ? <p style={{ color: "white" }}>{account}</p> : ""}
+          {account ? <span className="navbar-text">{account}</span> : ""}
+
+         
         </div>
-      </div>
+        <span className="navbar-text"> {user?.email} </span>
+        {/* <a href="/"  className="nav-link"  onClick={logout}>
+          Logout
+        </a> */}
+
+        <button className="btn btn-outline-info my-2 my-sm-0" type="submit" onClick={Logout}>Logout</button>
+       
+      </div>  
+
+    
     </div>
   );
 };
