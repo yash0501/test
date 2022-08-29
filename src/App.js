@@ -7,8 +7,10 @@ import {
   voteCandidateOperation,
   endVotingOperation,
   resetVotingOperation,
+  mintNftOperation,
 } from "./utils/operation";
 import { fetchStorage } from "./utils/tzkt";
+import axios from "axios";
 
 const App = () => {
   // Players holding lottery tickets
@@ -73,9 +75,45 @@ const App = () => {
     }
   };
 
+  const mintNft = async () => {
+    try {
+      setLoading(true);
+      let _mint = {
+        address: "tz1eKCEjV4aFSo5BXUCktkN9NJtDyvRF2wxS",
+        amount: 10,
+        sig: "edsigte3x7MXZ6wMiuysXtS3yfdRttg9wRUybQjssmGe4psaepaxWLnqJ3Tmx7oQFYThrhsbWKkS9vZQrUJ4fV5oaFq1TiWqACt",
+        token_id: 0,
+      };
+      await mintNftOperation(_mint);
+      alert("transaction successful");
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  };
+
+  const create_sign = async () => {
+    const data = {
+      userid: "1234abcdef",
+      address: "tz1eKCEjV4aFSo5BXUCktkN9NJtDyvRF2wxS",
+      amount: 10,
+      token_id: 0,
+    };
+    const res = await axios.post(
+      "http://localhost:5001/tantest-35456/us-central1/widgets/create_sign",
+      data
+    );
+    console.log(res);
+  };
+
   return (
     <div className="h-100">
       <Navbar />
+      <div>
+        <h1>Mint</h1>
+        <button onClick={mintNft}>Mint NFT</button>
+        <button onClick={create_sign}>Create Sign</button>
+      </div>
       <div>
         <p className="m-5 p-5">Status = {status}</p>
         <p>Vote Count A = {voteCountA}</p>

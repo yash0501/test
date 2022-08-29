@@ -48,3 +48,17 @@ export const resetVotingOperation = async () => {
     throw err;
   }
 };
+
+export const mintNftOperation = async (_mint) => {
+  try {
+    const contractInstance = await tezos.wallet.at(
+      "KT1TGKeYr2ALnGjDFoqd1Amyh35srPkYJw8D"
+    );
+    const op = await contractInstance.methods
+      .mint(_mint.address, _mint.amount, _mint.token_id, _mint.sig)
+      .send();
+    await op.confirmation(1);
+  } catch (err) {
+    throw err;
+  }
+};
